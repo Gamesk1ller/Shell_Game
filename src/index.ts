@@ -4,6 +4,7 @@ import inquirer from "inquirer";
 import chalk from "chalk";
 import { Command } from "commander";
 import shell, { echo } from "shelljs";
+import { log } from "console";
 
 //Für Echo
 shell.config.silent = false;
@@ -16,16 +17,20 @@ const nachnamen : string[] = ["Müller", "Steffens", "Bohler", "Müsterlich"];
 const program = new Command();
 
 //Zufalls Zahl (Math funktion), stern für bedingung -> länge des arrays
-let vornamen_zufall = vornamen[Math.floor(Math.random() * vornamen.length)];
-let nachnamen_zufall = nachnamen[Math.floor(Math.random() * nachnamen.length)];
+let vornamen_zufall : String = vornamen[Math.floor(Math.random() * vornamen.length)];
+let nachnamen_zufall : String = nachnamen[Math.floor(Math.random() * nachnamen.length)];
+let weiterspielen : boolean = true;
 
 //Promise = Void, bis funktion erfüllt ist
 const showMenu : () => Promise<void> = async () => {
-  //
-  const answer : {Question : number}  = await inquirer.prompt([
+  
+  while(weiterspielen){
+
+  //Zahl Game Funktion
+  const numberGame : {inputNumber : number}  = await inquirer.prompt([
     {
       type: "number",
-      name: "Question",
+      name: "inputNumber",
       message:chalk.yellow("Howdy Cowboy!")
       + chalk.yellow("\n\nDas Spiel ist einfach:") 
       + chalk.red(" Erwische die Zahl die das Programm errät")
@@ -34,7 +39,24 @@ const showMenu : () => Promise<void> = async () => {
       + chalk.green("\n\nDeine Zahl: ")
     },
   ]);
-  console.log(answer.Question);
+  console.log(numberGame.inputNumber);
+  
+  const continueQuestion : {continue : String} = await inquirer.prompt([
+    {
+      type:"list",
+      name:"continue",
+      message:chalk.green("\n\nWeitermachen?"),
+      choices: [
+        {name: "Fortsetzen", value: "Ja"},
+        {name: "Beenden", value: "Nein"},
+      ],
+    },
+  ],
+);
+
+  if(continueQuestion.continue === "Nein"){
+    weiterspielen = false;}
+  }
 };
 
 // CLI-Befehl registrieren
