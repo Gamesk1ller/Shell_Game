@@ -11,7 +11,6 @@ shell.config.silent = false;
 //Globale Variablen
 const vornamen: string[] = ['Bandit', 'Sheriff', 'Cowboy'];
 const nachnamen: string[] = ['Müller', 'Steffens', 'Bohler', 'Müsterlich'];
-let weiterspielen: boolean = true;
 let wahlZahl: number;
 
 // CLI-Programm erstellen
@@ -23,7 +22,6 @@ let nachnamen_zufall: string = nachnamen[Math.floor(Math.random() * nachnamen.le
 
 //Promise = Void, bis funktion erfüllt ist
 const showMenu: () => Promise<void> = async () => {
-    while (weiterspielen) {
         //Zahl Game Funktion
         const numberGame: { inputNumber: number } = await inquirer.prompt([
             {
@@ -44,7 +42,7 @@ const showMenu: () => Promise<void> = async () => {
 
         //Ergebnis Check     Floor = Abrunden     0/1
         if (wahlZahl % 2 === Math.floor(Math.random() * 2))  {
-            console.log('\nVerloren');
+            console.log(chalk.redBright("\nVerloren"));
         }
 
         //Weiterspielen Funktion
@@ -54,18 +52,17 @@ const showMenu: () => Promise<void> = async () => {
                 name: 'continue',
                 message: chalk.green('\n\nWeitermachen?'),
                 choices: [
-                    { name: 'Fortsetzen', value: 'Ja' },
-                    { name: 'Beenden', value: 'Nein' },
+                    { name: 'Fortsetzen', value: 'Y' },
+                    { name: 'Beenden', value: 'N' },
                 ],
             },
         ]);
 
         //Überprüfung der Weiterspielen Funktion
-        if (continueQuestion.continue === 'Nein') {
-            weiterspielen = false;
+        if (continueQuestion.continue === 'Y') {
+            showMenu();
         }
-    }
-};
+    };
 
 // CLI-Befehl registrieren
 program
