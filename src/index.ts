@@ -41,7 +41,6 @@ const showMenu: () => Promise<void> = async () => {
 
         //Eingegebene Nummer wird in globale Variable gespeichert
         wahlZahl = numberGame.inputNumber;
-        console.log('\n\n' + wahlZahl);
 
         //Ergebnis Check     Floor = Abrunden    * 2 = 0/1
         if (wahlZahl % 2 === Math.floor(Math.random() * 2))  {
