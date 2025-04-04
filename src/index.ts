@@ -12,6 +12,7 @@ shell.config.silent = false;
 const vornamen: string[] = ['Bandit', 'Sheriff', 'Cowboy'];
 const nachnamen: string[] = ['Müller', 'Steffens', 'Bohler', 'Müsterlich'];
 let weiterspielen: boolean = true;
+let wahlZahl: number;
 
 // CLI-Programm erstellen
 const program = new Command();
@@ -38,7 +39,14 @@ const showMenu: () => Promise<void> = async () => {
             },
         ]);
 
-        console.log(numberGame.inputNumber);
+        //Eingegebene Nummer wird in globale Variable gespeichert
+        wahlZahl = numberGame.inputNumber;
+        console.log('\n\n' + wahlZahl);
+
+        //Ergebnis Check     Floor = Abrunden    * 2 = 0/1
+        if (wahlZahl % 2 === Math.floor(Math.random() * 2))  {
+            console.log('\nVerloren');
+        }
 
         //Weiterspielen Funktion
         const continueQuestion: { continue: String } = await inquirer.prompt([
