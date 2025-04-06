@@ -30,7 +30,7 @@ const showMenu: () => Promise<void> = async () => {
         },
     ]);
 
-    //Check, whether Input nd Random is same => Lose
+    //Check, whether Input and Random Number is same => Lose
     if (numberInputFunction.numberInput % 2 === Math.floor(Math.random() * 2)) {
         console.log(chalk.redBright('\nToo bad. Ye lose'));
     } else {
