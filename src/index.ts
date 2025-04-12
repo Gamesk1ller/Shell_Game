@@ -4,70 +4,60 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import shell from 'shelljs';
+import { faker } from '@faker-js/faker';
 
-//Für Echo
+//Echo setting
 shell.config.silent = false;
 
-//Globale Variablen
-const vornamen: string[] = ['Bandit', 'Sheriff', 'Cowboy'];
-const nachnamen: string[] = ['Müller', 'Steffens', 'Bohler', 'Müsterlich'];
-let wahlZahl: number;
-
-// CLI-Programm erstellen
+//Create new CLI-Program
 const program = new Command();
 
-//Zufalls Zahl (Math funktion), stern für bedingung -> länge des arrays
-let vornamen_zufall: string = vornamen[Math.floor(Math.random() * vornamen.length)];
-let nachnamen_zufall: string = nachnamen[Math.floor(Math.random() * nachnamen.length)];
-
-//Promise = Void, bis funktion erfüllt ist
+//Promise = Void, until answer is given
 const showMenu: () => Promise<void> = async () => {
-        //Zahl Game Funktion
-        const numberGame: { inputNumber: number } = await inquirer.prompt([
-            {
-                type: 'number',
-                name: 'inputNumber',
-                message:
-                    chalk.yellow('Howdy Cowboy!') +
-                    chalk.yellow('\n\nDas Spiel ist einfach:') +
-                    chalk.red(' Erwische die Zahl die das Programm errät') +
-                    chalk.yellow('\nDein Gegener ist:') +
-                    chalk.bgMagenta('\n' + vornamen_zufall + ' ' + nachnamen_zufall) +
-                    chalk.green('\n\nDeine Zahl: '),
-            },
-        ]);
+    const firstName: string = faker.person.firstName();
+    const lastName: string = faker.person.lastName();
+    const numberInputFunction: { numberInput: number } = await inquirer.prompt([
+        {
+            type: 'number',
+            name: 'numberInput',
+            message:
+                chalk.yellow('Howdey Cowboy!') +
+                chalk.yellow("\n\nThe Game's easy:") +
+                chalk.red('\tChoose a number and the almighty Cowboy God may decide if yer right') +
+                chalk.yellow('\nYer Enemy: ') +
+                chalk.blueBright(firstName + ' ' + lastName) +
+                chalk.green('\n\nYer Number: '),
+        },
+    ]);
 
-        //Eingegebene Nummer wird in globale Variable gespeichert
-        wahlZahl = numberGame.inputNumber;
+    //Check, whether Input and Random Number is same => Lose
+    if (numberInputFunction.numberInput % 2 === Math.floor(Math.random() * 2)) {
+        console.log(chalk.redBright('\nToo bad. Ye lose'));
+    } else {
+        console.log('\nYe win mate' + '\n');
+    }
 
-        //Ergebnis Check     Floor = Abrunden     0/1
-        if (wahlZahl % 2 === Math.floor(Math.random() * 2))  {
-            console.log(chalk.redBright("\nVerloren"));
-        }
+    const questionContinue: { answerContinue: String } = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'answerContinue',
+            message: chalk.green('Play again?'),
+            choices: [
+                { name: 'Yes', value: 'Y' },
+                { name: 'No', value: 'N' },
+            ],
+        },
+    ]);
 
-        //Weiterspielen Funktion
-        const continueQuestion: { continue: String } = await inquirer.prompt([
-            {
-                type: 'list',
-                name: 'continue',
-                message: chalk.green('\n\nWeitermachen?'),
-                choices: [
-                    { name: 'Fortsetzen', value: 'Y' },
-                    { name: 'Beenden', value: 'N' },
-                ],
-            },
-        ]);
+    if (questionContinue.answerContinue === 'Y') {
+        showMenu();
+    }
+};
 
-        //Überprüfung der Weiterspielen Funktion
-        if (continueQuestion.continue === 'Y') {
-            showMenu();
-        }
-    };
-
-// CLI-Befehl registrieren
+// Register CLI Tool
 program
-    .name('testcli')
-    .description('Ein schönes TypeScript CLI-Tool mit Navigation und Farben')
+    .name('CLI-Shell Game')
+    .description('A Useful CLI-Tool with Navigtion and Colours')
     .version('1.0.0')
     .action(async () => {
         await showMenu();
