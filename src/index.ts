@@ -1,12 +1,9 @@
 #!/usr/bin/env node
-
-import inquirer from 'inquirer';
-import chalk from 'chalk';
 import { Command } from 'commander';
 import shell from 'shelljs';
 import ConditionManager from './models/NumberManager.class';
-import EnemyNameManager from './models/EnemyNameManager.class';
-
+import GameplayManager from './models/GameplayManer.class';
+import RepetitionManager from './models/RepititionManager.class';
 
 //Echo setting
 shell.config.silent = false;
@@ -16,39 +13,15 @@ const program = new Command();
 
 //Promise = Void, until answer is given
 const showMenu: () => Promise<void> = async () => {
-    const enemy = new EnemyNameManager();    
-
-
-    const numberInputFunction: { numberInput: number } = await inquirer.prompt([
-        {
-            type: 'number',
-            name: 'numberInput',
-            message:
-                chalk.yellow('Howdey Cowboy!') +
-                chalk.yellow("\n\nThe Game's easy:") +
-                chalk.red('\tChoose a number and the almighty Cowboy God may decide if yer right') +
-                chalk.yellow('\nYer Enemy: '+ enemy.getFullEnemyName) +
-                chalk.green('\n\nYer Number: '),
-        },
-    ]);
+    const mainGame = await GameplayManager.gameplay();
 
     //Check, whether Input and Random Number is same => Lose
-    ConditionManager.handleGameplay(numberInputFunction.numberInput);
+    ConditionManager.handleGameplay(mainGame.numberInput);
 
-    const questionContinue: { answerContinue: String } = await inquirer.prompt([
-        {
-            type: 'list',
-            name: 'answerContinue',
-            message: chalk.green('Play again?'),
-            choices: [
-                { name: 'Yes', value: 'Y' },
-                { name: 'No', value: 'N' },
-            ],
-        },
-    ]);
+    const questionContinue = await RepetitionManager.continueQuestion();
 
-    if (questionContinue.answerContinue === 'Y') {
-        showMenu();
+    if (questionContinue.continueAnswer === 'Y') {
+        await showMenu();
     }
 };
 
