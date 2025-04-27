@@ -2,7 +2,7 @@
 import { Command } from 'commander';
 import shell from 'shelljs';
 import ConditionManager from './models/NumberManager.class';
-import GameplayManager from './models/GameplayManer.class';
+import GameplayManager from './models/GameplayManager.class';
 import RepetitionManager from './models/RepititionManager.class';
 
 //Echo setting
