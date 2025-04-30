@@ -13,10 +13,10 @@ const program = new Command();
 
 //Promise = Void, until answer is given
 const showMenu: () => Promise<void> = async () => {
-    const mainGame = await GameplayManager.gameplay();
+    const gameplayInput = await GameplayManager.gameplayStart();
 
     //Check, whether Input and Random Number is same => Lose
-    ConditionManager.handleGameplay(mainGame.numberInput);
+    ConditionManager.handleGameplay(gameplayInput.numberInput);
 
     const questionContinue = await RepetitionManager.continueQuestion();
 

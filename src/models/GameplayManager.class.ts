@@ -4,7 +4,7 @@ import EnemyNameManager from './EnemyNameManager.class';
 
 class GameplayManager {
     //                              Promise that variable is number
-    public static async gameplay(): Promise <{ numberInput: number }> {
+    public static async gameplayStart(): Promise <{ numberInput: number }> {
         const enemy = new EnemyNameManager();    
 
         const game: { numberInput: number } = await inquirer.prompt([
