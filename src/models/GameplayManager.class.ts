@@ -3,10 +3,14 @@ import chalk from 'chalk';
 import EnemyNameManager from './EnemyNameManager.class';
 
 class GameplayManager {
-    //                              Promise that variable is number
+   /**
+    * - awaiting Input 
+    * - User prompt to give a number  
+    * @returns game a.k.a. numberInput
+    */
     public static async gameplayStart(): Promise <{ numberInput: number }> {
         const enemy = new EnemyNameManager();    
-
+        
         const game: { numberInput: number } = await inquirer.prompt([
             {
                 type: 'number',

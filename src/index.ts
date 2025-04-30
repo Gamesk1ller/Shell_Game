@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import shell from 'shelljs';
-import ConditionManager from './models/NumberManager.class';
-import GameplayManager from './models/GameplayManager.class';
-import RepetitionManager from './models/RepititionManager.class';
+import { GameplayManager, NumberManager, RepetitionManager } from './models';
 
 //Echo setting
 shell.config.silent = false;
@@ -11,12 +9,18 @@ shell.config.silent = false;
 //Create new CLI-Program
 const program = new Command();
 
-//Promise = Void, until answer is given
+/**
+ * - Prompting user for input via GameplayManager
+ * - Input NumberManager -> handle game logic (win/loss)
+ * - Asks to play again  with RepetitionManager
+ * - continue -> looping showMenu()
+ *
+ * @returns {Promise<void>} Resolves when the player chooses not to continue.
+ */
 const showMenu: () => Promise<void> = async () => {
     const gameplayInput = await GameplayManager.gameplayStart();
 
-    //Check, whether Input and Random Number is same => Lose
-    ConditionManager.handleGameplay(gameplayInput.numberInput);
+    NumberManager.handleGameplay(gameplayInput.numberInput);
 
     const questionContinue = await RepetitionManager.continueQuestion();
 
