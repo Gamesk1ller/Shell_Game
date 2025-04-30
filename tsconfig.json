@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vitest", "node"],
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "CommonJS",

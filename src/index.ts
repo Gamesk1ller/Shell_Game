@@ -1,10 +1,7 @@
 #!/usr/bin/env node
-
-import inquirer from 'inquirer';
-import chalk from 'chalk';
 import { Command } from 'commander';
 import shell from 'shelljs';
-import { faker } from '@faker-js/faker';
+import { GameplayManager, NumberManager, RepetitionManager } from './models';
 
 //Echo setting
 shell.config.silent = false;
@@ -12,45 +9,23 @@ shell.config.silent = false;
 //Create new CLI-Program
 const program = new Command();
 
-//Promise = Void, until answer is given
+/**
+ * - Prompting user for input via GameplayManager
+ * - Input NumberManager -> handle game logic (win/loss)
+ * - Asks to play again  with RepetitionManager
+ * - continue -> looping showMenu()
+ *
+ * @returns {Promise<void>} Resolves when the player chooses not to continue.
+ */
 const showMenu: () => Promise<void> = async () => {
-    const firstName: string = faker.person.firstName();
-    const lastName: string = faker.person.lastName();
-    const numberInputFunction: { numberInput: number } = await inquirer.prompt([
-        {
-            type: 'number',
-            name: 'numberInput',
-            message:
-                chalk.yellow('Howdey Cowboy!') +
-                chalk.yellow("\n\nThe Game's easy:") +
-                chalk.red('\tChoose a number and the almighty Cowboy God may decide if yer right') +
-                chalk.yellow('\nYer Enemy: ') +
-                chalk.blueBright(firstName + ' ' + lastName) +
-                chalk.green('\n\nYer Number: '),
-        },
-    ]);
+    const gameplayInput = await GameplayManager.gameplayStart();
 
-    //Check, whether Input and Random Number is same => Lose
-    if (numberInputFunction.numberInput % 2 === Math.floor(Math.random() * 2)) {
-        console.log(chalk.redBright('\nToo bad. Ye lose'));
-    } else {
-        console.log('\nYe win mate' + '\n');
-    }
+    NumberManager.handleGameplay(gameplayInput.numberInput);
 
-    const questionContinue: { answerContinue: String } = await inquirer.prompt([
-        {
-            type: 'list',
-            name: 'answerContinue',
-            message: chalk.green('Play again?'),
-            choices: [
-                { name: 'Yes', value: 'Y' },
-                { name: 'No', value: 'N' },
-            ],
-        },
-    ]);
+    const questionContinue = await RepetitionManager.continueQuestion();
 
-    if (questionContinue.answerContinue === 'Y') {
-        showMenu();
+    if (questionContinue.continueAnswer === 'Y') {
+        await showMenu();
     }
 };
 
