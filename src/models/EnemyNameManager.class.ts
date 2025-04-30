@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 class EnemyNameManager {
     
 /**
- * - creating a radom enemy Name
+ * - creating a random enemy Name
  * - creating a instance of Enemy for futur checks
  * @returns fullEnemyName a.k.a. randomised Name by faker function
  */

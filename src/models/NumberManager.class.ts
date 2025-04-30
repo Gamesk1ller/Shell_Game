@@ -3,7 +3,7 @@ import chalk from 'chalk';
 class NumberManager {
     
     /**
-     * - checking whether Number (which was given by PLayer) is in its right condition
+     * - checking whether Number (which was given by Player) is in its right condition
      * - throwing errors if number is not correct
      */
 
