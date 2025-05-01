@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import shell from 'shelljs';
-import { GameplayManager, NumberManager, RepetitionManager } from './models';
+import { GameplayManager, NumberManager, RepetitionManager, } from './models';
 
 //Echo setting
 shell.config.silent = false;
